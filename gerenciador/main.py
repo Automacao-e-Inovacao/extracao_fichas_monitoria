@@ -1,3 +1,13 @@
+import sys
+import os
+
+caminho_relativo = os.path.dirname(__file__)
+caminho_relativo = os.path.dirname(caminho_relativo)
+sys.path.append(caminho_relativo)
+ordem_das_etapas = ['static', 'insercao_datamart', 'extracao_site', 'venv']
+for etapa in ordem_das_etapas:
+    sys.path.append(os.path.join(caminho_relativo, etapa))
+
 from extracao_site.main import main as site
 from insercao_datamart.main import main as insercao
 from static.tratamento_excecao import tratamento_excecao
