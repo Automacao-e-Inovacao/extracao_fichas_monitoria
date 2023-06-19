@@ -24,6 +24,10 @@ class Conexao_postgresql(object):
                 return self.manipular(sql=sql, _Vars=_Vars)
             else:
                 e = str(e)
+                try:
+                    cur.close()
+                except:
+                    pass
                 raise AssertionError(e)
 
     def query(self, sql):
@@ -38,6 +42,10 @@ class Conexao_postgresql(object):
                 return self.query(sql=sql)
             else:
                 e = str(e)
+                try:
+                    cur.close()
+                except:
+                    pass
                 raise AssertionError(e)
 
     def consultar(self, sql) -> list[dict[Any, Any]]:
@@ -49,6 +57,7 @@ class Conexao_postgresql(object):
             ans = []
             for row in rs:
                 ans.append(dict(row))
+            cur.close()
             return ans
         except Exception as e:
             if self._db.closed != 0:
@@ -56,16 +65,11 @@ class Conexao_postgresql(object):
                 return self.consultar(sql=sql)
             else:
                 e = str(e)
+                try:
+                    cur.close()
+                except:
+                    pass
                 raise AssertionError(e)
-
-    def proximaPK(self, tabela, chave):
-        sql = 'select max(' + chave + ') from ' + tabela
-        rs = self.consultar(sql)
-        pk = rs[0][0]
-        if pk is None:
-            return 0
-        else:
-            return pk + 1
 
     def fechar(self):
         self._db.close()
