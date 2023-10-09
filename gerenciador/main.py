@@ -15,32 +15,32 @@ from static.registrar_consultar import registers
 import time
 import datetime
 
-tabela = 'public.hist_bases'
-nome_do_relatorio = 'optimus_monitoria_site'
+# tabela = 'public.hist_bases'
+# nome_do_relatorio = 'optimus_monitoria_site'
 
-dicionario = {
-    'carimbo_tempo': datetime.datetime.now(),
-    'nome_do_relatorio': nome_do_relatorio,
-    'tempo_de_extracao_seg': time.time()
-}
+# dicionario = {
+#     'carimbo_tempo': datetime.datetime.now(),
+#     'nome_do_relatorio': nome_do_relatorio,
+#     'tempo_de_extracao_seg': time.time()
+# }
 
-inst_main_extracao = site()
+# inst_main_extracao = site()
 
-inst_registers = registers()
+# inst_registers = registers()
 
-if inst_registers.procurar_historico_execucao(nome_do_relatorio=nome_do_relatorio):
-    dicionario['tentativa'] = inst_registers.qtd_tentativa
-    try:
-        inst_main_extracao.extracao_site_optimus()
-        dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
-        dicionario['concluido'] = True
-        inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
-    except:
-        str_erro = tratamento_excecao()
-        dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
-        dicionario['msg_erro'] = str_erro
-        dicionario['tentativa'] = inst_registers.qtd_tentativa + 1
-        inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
+# if inst_registers.procurar_historico_execucao(nome_do_relatorio=nome_do_relatorio):
+#     dicionario['tentativa'] = inst_registers.qtd_tentativa
+#     try:
+#         inst_main_extracao.extracao_site_optimus()
+#         dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
+#         dicionario['concluido'] = True
+#         inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
+#     except:
+#         str_erro = tratamento_excecao()
+#         dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
+#         dicionario['msg_erro'] = str_erro
+#         dicionario['tentativa'] = inst_registers.qtd_tentativa + 1
+#         inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
 
 tabela = 'public.hist_bases'
 nome_do_relatorio = 'fichas_importacao'
@@ -55,16 +55,17 @@ inst_main_extracao = insercao()
 
 inst_registers = registers()
 
-if inst_registers.procurar_historico_execucao(nome_do_relatorio=nome_do_relatorio):
-    dicionario['tentativa'] = inst_registers.qtd_tentativa
-    try:
-        inst_main_extracao.run()
-        dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
-        dicionario['concluido'] = True
-        inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
-    except:
-        str_erro = tratamento_excecao()
-        dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
-        dicionario['msg_erro'] = str_erro
-        dicionario['tentativa'] = inst_registers.qtd_tentativa + 1
-        inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
+# if inst_registers.procurar_historico_execucao(nome_do_relatorio=nome_do_relatorio):
+# dicionario['tentativa'] = inst_registers.qtd_tentativa
+dicionario['tentativa'] = 0
+try:
+    inst_main_extracao.run()
+    dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
+    dicionario['concluido'] = True
+    inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)
+except:
+    str_erro = tratamento_excecao()
+    dicionario['tempo_de_extracao_seg'] = time.time() - dicionario['tempo_de_extracao_seg']
+    dicionario['msg_erro'] = str_erro
+    dicionario['tentativa'] = inst_registers.qtd_tentativa + 1
+    inst_registers.registro_sucesso(dicionario=dicionario, tabela=tabela)

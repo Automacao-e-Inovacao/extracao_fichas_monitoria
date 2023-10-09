@@ -29,11 +29,13 @@ class main:
         
         assertividade = leitura.columns.str.contains('assertividade', case=False).tolist()
         distribuidora = leitura.columns.str.contains('distribuidora', case=False).tolist()
+        protocolo = leitura.columns.str.contains('protocolo', case=False).tolist()
         
         assertividade = [contagem for contagem, linha in enumerate(assertividade) if linha]
         distribuidora = [contagem for contagem, linha in enumerate(distribuidora) if linha]
+        protocolo = [contagem for contagem, linha in enumerate(protocolo) if linha]
         
-        lista_de_colunas = ['matricula', 'nome_funcionario', 'data da monitoria', 'data_ligacao', 'cod_monitoria', 'num_monitoria','perfil_monitoria']
+        lista_de_colunas = ['matricula', 'nome_funcionario', 'data da monitoria', 'data_ligacao', 'cod_monitoria', 'num_monitoria','perfil_monitoria', 'nome_monitor']
         
         if len(assertividade) != 1:
             if nome_ficha == 'CNR - COBE - REGIONAL 2022':
@@ -43,17 +45,28 @@ class main:
             else:
                 print(f'Assertividade difrente que o previsto = {len(assertividade)} - {nome_ficha}')
                 return leitura
+            
         if len(distribuidora) > 1:
             if nome_ficha == 'FICHA DE RECLAMAÇÃO - HABILIDADE DE TRATAMENTO - NOTA RC - 2022.':
                 distribuidora = [distribuidora[0]]
             else:
                 print(f'Distribuidora maior que o previsto = {len(distribuidora)} - {nome_ficha}')
                 return leitura
-        
+            
         for linha in assertividade:
             lista_de_colunas.append(leitura.columns[linha])
         for linha in distribuidora:
             lista_de_colunas.append(leitura.columns[linha])
+            
+        if len(protocolo) > 0:
+            protocolo = [protocolo[0]]
+            for linha in protocolo:
+                lista_de_colunas.append(leitura.columns[linha])
+        else:
+            leitura['protocolo'] = [None] * len(leitura)
+            lista_de_colunas.append('protocolo')
+            
+        
         
         leitura = leitura.loc[:, lista_de_colunas]
         if len(distribuidora) == 0:
@@ -70,7 +83,7 @@ class main:
         df['matricula'] = pandas.to_numeric(df['matricula'])
         df['cod_monitoria'] = pandas.to_numeric(df['cod_monitoria'])
         df['num_monitoria'] = pandas.to_numeric(df['num_monitoria'])
-        df[df.columns[len(df.columns) - 2]] = pandas.to_numeric(df[df.columns[len(df.columns) - 2]])
+        df[df.columns[len(df.columns) - 3]] = pandas.to_numeric(df[df.columns[len(df.columns) - 3]])
         
         return df
     
@@ -83,9 +96,10 @@ class main:
     
     
     def deixando_no_modelo_datamart(self, df):
+        protocolo = df.columns[len(df.columns) - 1]
         distribuidora = df.columns[len(df.columns) - 2]
         assertividade = df.columns[len(df.columns) - 3]
-        df = df.rename(columns={'nome_funcionario' : 'nome_do_funcionario', 'data da monitoria' : 'data_da_monitoria', assertividade : 'assertividade', distribuidora : 'distribuidora'})
+        df = df.rename(columns={'nome_funcionario' : 'nome_do_funcionario', 'data da monitoria' : 'data_da_monitoria', assertividade : 'assertividade', distribuidora : 'distribuidora', protocolo: 'protocolo'})
         
         return df
     
@@ -100,12 +114,12 @@ class main:
             nome_ficha = nome_ficha.replace('\\', '')
             nome_ficha = nome_ficha.replace('{:02d}-{:04d} '.format(self.data_atual.month,self.data_atual.year), '')
             df = self.leitura(caminho_ficha, nome_ficha)
-            if df.shape[1] != 9:
+            if df.shape[1] != 11:
                 continue
             
             df = self.tratamento_do_dataframe(df=df)
-            df = self.colunas_adicionais(df=df, nome_ficha=nome_ficha)
             df = self.deixando_no_modelo_datamart(df=df)
+            df = self.colunas_adicionais(df=df, nome_ficha=nome_ficha)
             
             if self.colunas == '':
                 self.colunas = df.columns.tolist()

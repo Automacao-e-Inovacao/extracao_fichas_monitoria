@@ -14,10 +14,20 @@ class Conexao_postgresql(object):
 
     def manipular(self, sql, _Vars):
         try:
-            cur = self._db.cursor()
-            cur.execute(sql, _Vars)
-            cur.close()
-            self._db.commit()
+            if 'insert' in sql[:10]:
+                # if 'RETURNING id' not in sql:
+                #     sql = sql + ' RETURNING id '
+                cur = self._db.cursor()
+                cur.execute(sql, _Vars)
+                # fk = cur.fetchone()[0]
+                cur.close()
+                self._db.commit()
+                # return fk
+            else:
+                cur = self._db.cursor()
+                cur.execute(sql, _Vars)
+                cur.close()
+                self._db.commit()
         except Exception as e:
             if self._db.closed != 0:
                 self._db = connect(host=self.mhost, database=self.db, user=self.usr, password=self.pwd)
