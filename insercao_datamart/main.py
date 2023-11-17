@@ -6,8 +6,8 @@ from static.registrar_consultar import registers
 class main:
     caminho_relativo = r'\\55ASPDCARQ01\55Atende\Administrativo\06 - Gerência Contact Center\03 - Call Center Sao Luis\02 - Monitoria de Qualidade\10.BASES'
     
-    def __init__(self) -> None:
-        self.data_atual = datetime.date.today()
+    def __init__(self, dia_anterior) -> None:
+        self.data_atual = dia_anterior
         lista_de_arquivos = os.listdir(self.__class__.caminho_relativo)
         self.lista_de_arquivos = [os.path.join(self.__class__.caminho_relativo, linha) for linha in lista_de_arquivos if linha.endswith('.xls') and linha.startswith('{:02d}-{:04d}'.format(self.data_atual.month,self.data_atual.year))]
         self.conexao = registers()

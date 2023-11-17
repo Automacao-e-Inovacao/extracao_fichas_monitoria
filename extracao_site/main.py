@@ -10,13 +10,13 @@ from playwright.sync_api import sync_playwright
 
 class main:
     meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
-    usuario_optimus = '5507392'
-    senha_optimus = '123456'
+    usuario_optimus = '5513000'
+    senha_optimus = 'Elilimbar@19'
 
     def __init__(self) -> None:
         self.tempo_espera = time.time()
         self.caminho_relativo = os.path.dirname(__file__)
-        self.data_atual = datetime.date.today()
+        self.data_atual = datetime.datetime.now()
         self.dia_anterior = self.data_atual - datetime.timedelta(days=1)
 
     def configuracao_playwright(self, p):
@@ -61,16 +61,16 @@ class main:
         page.frame_locator("iframe[name=\"navMain\"]").locator("a:has-text(\"" + mes + "\")").click()
         page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_150").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_121").check()
-        page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_86").check()
+        page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_85").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_201").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_166").check()
-        page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkFiltarOpPrincipal\"]").check()
+        # page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkFiltarOpPrincipal\"]").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_2\"]").wait_for()
         page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkTodos2\"]").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_6\"]").wait_for()
         page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkTodos6\"]").check()
-        page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_15\"]").wait_for()
-        page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkTodos15\"]").check()
+        # page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_15\"]").wait_for()
+        # page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkTodos15\"]").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_32\"]").wait_for()
         page.frame_locator("iframe[name=\"navMain\"]").locator("input[name=\"chkTodos32\"]").check()
         page.frame_locator("iframe[name=\"navMain\"]").locator("select[name=\"grupo_36\"]").wait_for()

@@ -51,7 +51,7 @@ dicionario = {
     'tempo_de_extracao_seg': time.time()
 }
 
-inst_main_extracao = insercao()
+inst_main_extracao = insercao(dia_anterior=inst_main_extracao.dia_anterior)
 
 inst_registers = registers()
 
