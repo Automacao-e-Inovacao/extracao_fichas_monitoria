@@ -13,11 +13,10 @@ class main:
     usuario_optimus = '5513000'
     senha_optimus = 'Elilimbar@19'
 
-    def __init__(self) -> None:
+    def __init__(self, data_extracao) -> None:
         self.tempo_espera = time.time()
         self.caminho_relativo = os.path.dirname(__file__)
-        self.data_atual = datetime.datetime.now()
-        self.dia_anterior = self.data_atual - datetime.timedelta(days=1)
+        self.data_extracao = data_extracao
 
     def configuracao_playwright(self, p):
         caminho_driver = os.path.dirname(self.caminho_relativo)
@@ -55,8 +54,8 @@ class main:
         page.locator("id=853 >> nth=1").click()
 
     def checagem_inicial_da_tela_exporta_monitorias(self, page):
-        mes = self.__class__.meses[self.dia_anterior.month - 1]
-        if self.dia_anterior.year != datetime.datetime.now().year:
+        mes = self.__class__.meses[self.data_extracao.month - 1]
+        if self.data_extracao.year != datetime.datetime.now().year:
             page.frame_locator("iframe[name=\"navMain\"]").locator("th[class=\"datepickerGoPrev\"]").click()
         page.frame_locator("iframe[name=\"navMain\"]").locator("a:has-text(\"" + mes + "\")").click()
         page.frame_locator("iframe[name=\"navMain\"]").locator("#rdItem_150").check()
@@ -126,8 +125,8 @@ class main:
                         page_1.wait_for_event("download")
 
                     download = download_info.value
-                    file_name = '{:02d}-{:04d}'.format(self.dia_anterior.month,
-                                                       self.dia_anterior.year) + ' ' + ficha + '.xls'
+                    file_name = '{:02d}-{:04d}'.format(self.data_extracao.month,
+                                                       self.data_extracao.year) + ' ' + ficha + '.xls'
                     destination_folder_path = r"\\55ASPDCARQ01\55Atende\Administrativo\06 - Gerência Contact Center\03 - Call Center Sao Luis\02 - Monitoria de Qualidade\10.BASES"
 
                     time.sleep(3)
